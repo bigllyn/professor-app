@@ -84,6 +84,7 @@ export default function FinanceiroView({ userId, initialContext }: { userId: str
   const fetchLookups = useCallback(async () => {
     if (isSchoolContext) return
     const [stRes, lsRes] = await Promise.all([
+      // Regra: buscar diretamente em public.students, listar TODOS do professor com school_id nulo, sem filtrar por status, e não depender de aula.
       supabase.from("students").select("id, name").eq("teacher_id", userId).is("school_id", null).order("name"),
       supabase.from("lessons").select("id, title, date, student_id").eq("teacher_id", userId).is("school_id", null).neq("status", "cancelled").order("date", {ascending: false}).limit(100)
     ])
