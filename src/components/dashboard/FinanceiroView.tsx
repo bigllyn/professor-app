@@ -84,7 +84,7 @@ export default function FinanceiroView({ userId, initialContext }: { userId: str
   const fetchLookups = useCallback(async () => {
     if (isSchoolContext) return
     const [stRes, lsRes] = await Promise.all([
-      supabase.from("students").select("id, name").eq("teacher_id", userId).eq("status", "active").is("school_id", null).order("name"),
+      supabase.from("students").select("id, name").eq("teacher_id", userId).is("school_id", null).order("name"),
       supabase.from("lessons").select("id, title, date, student_id").eq("teacher_id", userId).is("school_id", null).neq("status", "cancelled").order("date", {ascending: false}).limit(100)
     ])
     if (stRes.data) setStudentsList(stRes.data)
@@ -359,7 +359,19 @@ export default function FinanceiroView({ userId, initialContext }: { userId: str
 
           <div className="space-y-2">
             <label className="text-sm font-bold text-gray-700">Aula Relacionada (Opcional)</label>
-            <select value={formData.lesson_id} onChange={e => setFormData({...formData, lesson_id: e.target.value})} className="w-full h-10 px-3 rounded-xl border border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-900 outline-none">
+            <select 
+              value={formData.lesson_id} 
+              onChange={e => {
+                const val = e.target.value
+                const lesson = lessonsList.find(l => l.id === val)
+                setFormData(prev => ({
+                  ...prev, 
+                  lesson_id: val,
+                  ...(lesson?.student_id ? { student_id: lesson.student_id } : {})
+                }))
+              }} 
+              className="w-full h-10 px-3 rounded-xl border border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-900 outline-none"
+            >
               <option value="">Nenhuma aula vinculada</option>
               {lessonsList.filter(l => !formData.student_id || l.student_id === formData.student_id || l.student_id === null).map(l => (
                 <option key={l.id} value={l.id}>{new Date(l.date + 'T12:00:00').toLocaleDateString('pt-BR')} - {l.title}</option>
