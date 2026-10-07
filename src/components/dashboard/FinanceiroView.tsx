@@ -214,13 +214,19 @@ export default function FinanceiroView({ userId, initialContext }: { userId: str
       if (!error && data) {
         setFinances(prev => prev.map(f => f.id === editingId ? data as unknown as FinanceRecord : f))
         setIsModalOpen(false)
-      } else alert("Erro ao atualizar.")
+      } else {
+        console.error("🔥 SUPABASE ERROR (UPDATE):", error, "Payload:", payload)
+        alert(`Erro ao atualizar:\nMessage: ${error?.message}\nDetails: ${error?.details}\nHint: ${error?.hint}\nCode: ${error?.code}`)
+      }
     } else {
       const { data, error } = await supabase.from("private_lesson_finances").insert(payload).select("*, students(name), lessons(title, date)").single()
       if (!error && data) {
         setFinances(prev => [data as unknown as FinanceRecord, ...prev])
         setIsModalOpen(false)
-      } else alert("Erro ao criar lançamento.")
+      } else {
+        console.error("🔥 SUPABASE ERROR (INSERT):", error, "Payload:", payload)
+        alert(`Erro ao criar lançamento:\nMessage: ${error?.message}\nDetails: ${error?.details}\nHint: ${error?.hint}\nCode: ${error?.code}`)
+      }
     }
     setSaving(false)
   }
