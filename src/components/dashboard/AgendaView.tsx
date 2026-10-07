@@ -552,6 +552,22 @@ export function AgendaView({
       const { data, error } = await supabase.from("lessons").update(payload).eq("id", selectedLesson.id).select("*, classes(name), subjects(name), students(name)").single()
       if (error) setFormError("Erro ao atualizar: " + error.message)
       else {
+        if (finalSchoolId === null && payload.student_id) {
+          const { data: existingLs } = await supabase.from("lesson_students").select("id, student_id").eq("lesson_id", selectedLesson.id)
+          const hasCurrentStudent = existingLs?.find(ls => ls.student_id === payload.student_id)
+          if (!hasCurrentStudent) {
+            const studentName = lookups?.students.find(s => s.id === payload.student_id)?.name || "Aluno"
+            await supabase.from("lesson_students").insert({
+              lesson_id: selectedLesson.id,
+              student_id: payload.student_id,
+              teacher_id: userId,
+              school_id: null,
+              class_id: null,
+              student_name_snapshot: studentName,
+              class_name_snapshot: null
+            })
+          }
+        }
         fetchLessons(currentDateStr, viewMode)
         setActiveModal('none')
         setSelectedLesson(data as any)
