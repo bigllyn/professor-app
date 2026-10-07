@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation"
 export function LoginForm() {
   const router = useRouter()
   const supabase = createClient()
-  const [email, setEmail] = React.useState("")
+  const [loginId, setLoginId] = React.useState("")
   const [password, setPassword] = React.useState("")
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState("")
@@ -20,13 +20,27 @@ export function LoginForm() {
     setLoading(true)
     setError("")
     
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
+    let targetEmail = loginId.trim()
+
+    // Se não contiver '@', tenta resolver como username via RPC
+    if (!targetEmail.includes("@")) {
+      const { data: resolvedEmail, error: rpcError } = await supabase.rpc("get_email_by_username", { p_username: targetEmail })
+      
+      if (rpcError || !resolvedEmail) {
+        setError("Credenciais inválidas.")
+        setLoading(false)
+        return
+      }
+      targetEmail = resolvedEmail as string
+    }
+
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: targetEmail,
       password,
     })
 
-    if (error) {
-      setError(error.message)
+    if (signInError) {
+      setError(signInError.message)
       setLoading(false)
       return
     }
@@ -49,11 +63,11 @@ export function LoginForm() {
       {error && <div className="text-red-500 text-sm">{error}</div>}
       <form onSubmit={handleEmailLogin} className="flex flex-col gap-4">
         <Input 
-          type="email" 
-          placeholder="Seu e-mail" 
+          type="text" 
+          placeholder="E-mail ou Usuário" 
           icon={<Mail className="h-5 w-5" />} 
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={loginId}
+          onChange={(e) => setLoginId(e.target.value)}
           required
         />
         <div className="relative">
