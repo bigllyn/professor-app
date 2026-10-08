@@ -5,12 +5,22 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { 
   Home, Calendar, Users, Activity, Award, DollarSign, 
-  Menu, X, BookOpen, GraduationCap, History, PieChart
+  Menu, X, BookOpen, GraduationCap, History, PieChart, LogOut
 } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
+import { useRouter } from "next/navigation"
 
 export function DashboardNavigation() {
   const pathname = usePathname()
+  const router = useRouter()
+  const supabase = createClient()
   const [isMoreOpen, setIsMoreOpen] = React.useState(false)
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push("/auth/login")
+    router.refresh()
+  }
 
   // As rotas principais que ficam direto na barra inferior
   const mainNav = [
@@ -36,7 +46,7 @@ export function DashboardNavigation() {
     <>
       {/* Desktop Sidebar (oculta no mobile) */}
       <aside className="hidden md:flex flex-col w-64 border-r border-gray-200 bg-white fixed h-screen top-0 left-0 pt-16 z-0">
-        <div className="p-4 space-y-2 overflow-y-auto pb-20">
+        <div className="p-4 space-y-2 overflow-y-auto flex-1">
           {allNav.map((item) => {
             const isActive = pathname === item.href
             const Icon = item.icon
@@ -55,6 +65,15 @@ export function DashboardNavigation() {
               </Link>
             )
           })}
+        </div>
+        <div className="p-4 border-t border-gray-200 pb-8">
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center gap-3 px-4 py-3 rounded-xl transition-colors text-red-600 hover:bg-red-50"
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="font-medium">Sair</span>
+          </button>
         </div>
       </aside>
 
@@ -116,6 +135,16 @@ export function DashboardNavigation() {
                     </Link>
                 )
               })}
+              <button
+                onClick={() => {
+                  setIsMoreOpen(false);
+                  handleLogout();
+                }}
+                className="flex flex-col items-center gap-2 p-3 rounded-xl transition-colors bg-red-50 text-red-600 border-2 border-transparent"
+              >
+                <LogOut className="w-6 h-6 text-red-600" />
+                <span className="text-[11px] font-semibold text-center">Sair</span>
+              </button>
             </div>
           </div>
         </div>

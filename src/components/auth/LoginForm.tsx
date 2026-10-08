@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Mail, Lock, Eye } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 export function LoginForm() {
   const router = useRouter()
@@ -89,9 +90,9 @@ export function LoginForm() {
             <input type="checkbox" className="rounded text-gray-900 focus:ring-gray-900 border-gray-300 w-4 h-4" />
             <span className="text-gray-600">Lembrar de mim</span>
           </label>
-          <button type="button" className="text-gray-500 hover:text-gray-900">
-            Esqueceu sua senha?
-          </button>
+          <Link href="/auth/forgot-password" className="text-gray-500 hover:text-gray-900">
+            Esqueci minha senha
+          </Link>
         </div>
 
         <Button type="submit" className="mt-2" disabled={loading}>
