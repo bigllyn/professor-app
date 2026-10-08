@@ -39,14 +39,26 @@ export async function updateSession(request: NextRequest) {
     // Redirect to login if user is not authenticated and trying to access a protected route
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
-    return NextResponse.redirect(url)
+    const redirectResponse = NextResponse.redirect(url)
+    
+    // Mova os cookies do supabaseResponse para a resposta de redirecionamento
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie)
+    })
+    return redirectResponse
   }
 
   if (user && isAuthRoute) {
     // Redirect to dashboard if user is authenticated and trying to access login/register
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
+    const redirectResponse = NextResponse.redirect(url)
+    
+    // Mova os cookies do supabaseResponse para a resposta de redirecionamento
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie)
+    })
+    return redirectResponse
   }
 
   return supabaseResponse
