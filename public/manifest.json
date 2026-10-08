@@ -1,8 +1,9 @@
 {
   "name": "Professor",
   "short_name": "Professor",
-  "description": "Organize suas aulas e acompanhe seus alunos.",
+  "description": "Assistente profissional para professores",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",

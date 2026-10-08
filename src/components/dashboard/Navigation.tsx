@@ -78,7 +78,7 @@ export function DashboardNavigation() {
       </aside>
 
       {/* Mobile Bottom Navigation (oculta no desktop) */}
-      <nav className="md:hidden bg-white border-t border-gray-200 fixed bottom-0 w-full flex items-center justify-between pb-safe pt-2 px-2 h-16 z-50">
+      <nav className="md:hidden bg-white border-t border-gray-200 fixed bottom-0 w-full flex items-center justify-between pb-safe pt-2 px-2 min-h-[4rem] z-50">
         {mainNav.map((item) => {
           const isActive = pathname === item.href
           const Icon = item.icon
@@ -110,12 +110,12 @@ export function DashboardNavigation() {
 
       {/* Mobile Drawer (Menu "Mais") */}
       {isMoreOpen && (
-        <div className="md:hidden fixed inset-0 z-40 bg-black/50 flex flex-col justify-end pb-16 animate-in fade-in duration-200">
+        <div className="md:hidden fixed inset-0 z-40 bg-black/50 flex flex-col justify-end pb-[calc(4rem+env(safe-area-inset-bottom))] animate-in fade-in duration-200">
           <div 
             className="absolute inset-0" 
             onClick={() => setIsMoreOpen(false)}
           />
-          <div className="bg-white rounded-t-3xl border-t border-gray-200 p-4 shadow-xl relative animate-in slide-in-from-bottom-full duration-300">
+          <div className="bg-white rounded-t-3xl border-t border-gray-200 p-4 pb-8 shadow-xl relative animate-in slide-in-from-bottom-full duration-300">
             <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6" />
             <div className="grid grid-cols-3 gap-4 pb-4">
               {moreNav.map((item) => {

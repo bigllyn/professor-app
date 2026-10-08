@@ -9,9 +9,9 @@ const inter = Inter({
 });
 
 const APP_NAME = "Professor";
-const APP_DEFAULT_TITLE = "Professor - Organize suas aulas";
+const APP_DEFAULT_TITLE = "Professor";
 const APP_TITLE_TEMPLATE = "%s - Professor";
-const APP_DESCRIPTION = "Aplicativo para professores organizarem sua vida profissional, escolas, turmas, alunos e aulas.";
+const APP_DESCRIPTION = "Assistente profissional para professores";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
@@ -40,6 +40,8 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
+import { InstallPrompt } from "@/components/pwa/InstallPrompt";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -49,6 +51,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={`${inter.variable} font-sans bg-gray-50 text-gray-900 antialiased`}>
         {children}
+        <InstallPrompt />
       </body>
     </html>
   );

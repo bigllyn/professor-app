@@ -51,7 +51,7 @@ export default async function DashboardLayout({
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto pb-20 md:pb-8 w-full">
+        <main className="flex-1 overflow-y-auto w-full pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-8">
           {children}
         </main>
       </div>
