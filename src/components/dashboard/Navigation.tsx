@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { 
   Home, Calendar, Users, Activity, Award, DollarSign, 
-  Menu, X, BookOpen, GraduationCap, History
+  Menu, X, BookOpen, GraduationCap, History, PieChart
 } from "lucide-react"
 
 export function DashboardNavigation() {
@@ -27,6 +27,7 @@ export function DashboardNavigation() {
     { href: "/dashboard/financeiro", label: "Financeiro", icon: DollarSign },
     { href: "/dashboard/historico", label: "Histórico", icon: History },
     { href: "/dashboard/disciplinas", label: "Disciplinas", icon: BookOpen },
+    { href: "/dashboard/relatorios", label: "Relatórios", icon: PieChart },
   ]
 
   const allNav = [...mainNav, ...moreNav]
