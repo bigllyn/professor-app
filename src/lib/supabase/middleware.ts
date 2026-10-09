@@ -32,8 +32,15 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const isAuthRoute = request.nextUrl.pathname.startsWith('/auth')
-  const isPublicRoute = request.nextUrl.pathname === '/' || isAuthRoute || request.nextUrl.pathname.startsWith('/manifest.json')
+  const isAuthRoute = request.nextUrl.pathname.startsWith('/auth') 
+    && request.nextUrl.pathname !== '/auth/reset-password'
+    && request.nextUrl.pathname !== '/auth/callback'
+
+  // As rotas de auth (login, register, forgot-password) são publicas.
+  // Callback e reset-password também devem ser acessíveis (callback é publico, reset-password exige sessão).
+  const isPublicRoute = request.nextUrl.pathname === '/' || 
+                        request.nextUrl.pathname.startsWith('/auth') || 
+                        request.nextUrl.pathname.startsWith('/manifest.json')
 
   if (!user && !isPublicRoute) {
     // Redirect to login if user is not authenticated and trying to access a protected route

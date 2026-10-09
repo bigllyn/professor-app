@@ -19,8 +19,9 @@ export default function ForgotPasswordPage() {
     setLoading(true)
     setError("")
     
-    // Configura URL para onde o usuario voltará para digitar a nova senha
-    const redirectTo = `${window.location.origin}/auth/reset-password`
+    // Configura URL para onde o usuario voltará. 
+    // Com SSR, DEVE passar pela rota de callback para processar o código PKCE.
+    const redirectTo = `${window.location.origin}/auth/callback?next=/auth/reset-password`
 
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo,
