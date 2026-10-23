@@ -16,6 +16,6 @@ export const config = {
      * - sw.js (Service Worker)
      * - public folder
      */
-    '/((?!_next/static|_next/image|favicon.ico|icon-|sw.js|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|manifest.json|apple-touch-icon.png|icon-|sw.js|\\.well-known|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }

@@ -40,6 +40,7 @@ export async function updateSession(request: NextRequest) {
   // Callback e reset-password também devem ser acessíveis (callback é publico, reset-password exige sessão).
   const isPublicRoute = request.nextUrl.pathname === '/' || 
                         request.nextUrl.pathname.startsWith('/auth') || 
+                        request.nextUrl.pathname.startsWith('/offline') ||
                         request.nextUrl.pathname.startsWith('/manifest.json')
 
   if (!user && !isPublicRoute) {
